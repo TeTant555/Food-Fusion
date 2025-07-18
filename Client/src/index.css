@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Karla:ital,wght@0,200..800;1,200..800&display=swap')
-layer(base);
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Karla:ital,wght@0,200..800;1,200..800&display=swap') layer(base);
 @import 'tailwindcss';
 
 @custom-var`iant dark (&:is(.dark *));
 @plugin "tailwindcss-animate";
+
 @theme {
 	--font-title: 'Karla', sans-serif;
 	--font-display: 'Inconsolata', monospace;
@@ -46,30 +46,241 @@ layer(base);
 	--color-chart-4: hsl(var(--chart-4));
 	--color-chart-5: hsl(var(--chart-5));
 
-	--color-pri: #E3DFD4;
-    --color-sec: #666E55;
-    --color-ter: #EFECE3;
-    --color-txt: #1A1A1A; 
+	/* --color-pri: #DADDD0;  
+	--color-sec: #364CE4;  
+	--color-ter: #ECEDE7;  
+	--color-txt: #2A2A2E; */ 
 
-	/* --color-pri: #2A2A2E;
-    --color-sec: #EBF29C;
-    --color-ter: #35353A;
-    --color-txt: #F5F5F7; */
+	--color-pri: #E3DFD4;
+	--color-sec: #666E55;
+	--color-ter: #EFECE3;
+	--color-txt: #1A1A1A;
 }
 
 /* Font */
 
 .manrope {
-  font-family: "Manrope", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: normal;
-  font-style: normal;
+	font-family: "Manrope", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: normal;
+	font-style: normal;
 }
+
 .inter {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: normal;
-  font-style: normal;
+	font-family: "Inter", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Loader */
+.loader-overlay {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	backdrop-filter: blur(6px);
+	background-color: rgba(255, 255, 255, 0);
+	/* fully transparent background */
+	z-index: 9999;
+}
+
+#wifi-loader {
+	--front-color: var(--color-sec);
+	--back-color: var(--color-sec);
+	--text-color: #414856;
+	width: 64px;
+	height: 64px;
+	border-radius: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#wifi-loader svg {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#wifi-loader svg circle {
+	fill: none;
+	stroke-width: 6px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	transform: rotate(-100deg);
+	transform-origin: center;
+}
+
+#wifi-loader svg circle.back {
+	stroke: var(--back-color);
+}
+
+#wifi-loader svg circle.front {
+	stroke: var(--front-color);
+}
+
+#wifi-loader svg.circle-outer {
+	height: 86px;
+	width: 86px;
+}
+
+#wifi-loader svg.circle-outer circle {
+	stroke-dasharray: 62.75 188.25;
+}
+
+#wifi-loader svg.circle-outer circle.back {
+	animation: circle-outer135 1.8s ease infinite 0.3s;
+}
+
+#wifi-loader svg.circle-outer circle.front {
+	animation: circle-outer135 1.8s ease infinite 0.15s;
+}
+
+#wifi-loader svg.circle-middle {
+	height: 60px;
+	width: 60px;
+}
+
+#wifi-loader svg.circle-middle circle {
+	stroke-dasharray: 42.5 127.5;
+}
+
+#wifi-loader svg.circle-middle circle.back {
+	animation: circle-middle6123 1.8s ease infinite 0.25s;
+}
+
+#wifi-loader svg.circle-middle circle.front {
+	animation: circle-middle6123 1.8s ease infinite 0.1s;
+}
+
+#wifi-loader svg.circle-inner {
+	height: 34px;
+	width: 34px;
+}
+
+#wifi-loader svg.circle-inner circle {
+	stroke-dasharray: 22 66;
+}
+
+#wifi-loader svg.circle-inner circle.back {
+	animation: circle-inner162 1.8s ease infinite 0.2s;
+}
+
+#wifi-loader svg.circle-inner circle.front {
+	animation: circle-inner162 1.8s ease infinite 0.05s;
+}
+
+#wifi-loader .text {
+	position: absolute;
+	bottom: -40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-transform: lowercase;
+	font-weight: 500;
+	font-size: 14px;
+	letter-spacing: 0.2px;
+}
+
+#wifi-loader .text::before,
+#wifi-loader .text::after {
+	content: attr(data-text);
+}
+
+#wifi-loader .text::before {
+	color: var(--text-color);
+}
+
+#wifi-loader .text::after {
+	color: var(--front-color);
+	animation: text-animation76 3.6s ease infinite;
+	position: absolute;
+	left: 0;
+}
+
+@keyframes circle-outer135 {
+	0% {
+	  stroke-dashoffset: 25;
+	}
+	25% {
+	  stroke-dashoffset: 0;
+	}
+	65% {
+	  stroke-dashoffset: 301;
+	}
+	80% {
+	  stroke-dashoffset: 276;
+	}
+	100% {
+	  stroke-dashoffset: 276;
+	}
+  }
+  
+  @keyframes circle-middle6123 {
+	0% {
+	  stroke-dashoffset: 17;
+	}
+	25% {
+	  stroke-dashoffset: 0;
+	}
+	65% {
+	  stroke-dashoffset: 204;
+	}
+	80% {
+	  stroke-dashoffset: 187;
+	}
+	100% {
+	  stroke-dashoffset: 187;
+	}
+  }
+  
+  @keyframes circle-inner162 {
+	0% {
+	  stroke-dashoffset: 9;
+	}
+	25% {
+	  stroke-dashoffset: 0;
+	}
+	65% {
+	  stroke-dashoffset: 106;
+	}
+	80% {
+	  stroke-dashoffset: 97;
+	}
+	100% {
+	  stroke-dashoffset: 97;
+	}
+  }
+  
+  @keyframes text-animation76 {
+	0% {
+	  clip-path: inset(0 100% 0 0);
+	}
+	50% {
+	  clip-path: inset(0);
+	}
+	100% {
+	  clip-path: inset(0 0 0 100%);
+	}
+  }
+
+/* Modal popup animation */
+@keyframes modal-animate-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-animate-in {
+  animation: modal-animate-in 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /*
@@ -81,6 +292,7 @@ layer(base);
   color utility to any element that depends on these defaults.
 */
 @layer base {
+
 	*,
 	::after,
 	::before,
@@ -118,6 +330,7 @@ layer(base);
 		--chart-5: 27 87% 67%;
 		--radius: 0.5rem;
 	}
+
 	.dark {
 		--background: 0 0% 3.9%;
 		--foreground: 0 0% 98%;
@@ -145,10 +358,12 @@ layer(base);
 		--chart-5: 340 75% 55%;
 	}
 }
+
 @layer base {
 	* {
 		@apply border-border;
 	}
+
 	body {
 		@apply bg-background text-foreground;
 	}
@@ -164,8 +379,11 @@ layer(base);
 }
 
 /* Nav Content */
-nav:has(.align-right) > .left-0 {
-  left: auto !important;     /* kill the default anchor */
-  right: 0 !important;       /* stick to the right edge */
-  transform: none !important;/* remove translateX(-50%) */
+nav:has(.align-right)>.left-0 {
+	left: auto !important;
+	/* kill the default anchor */
+	right: 0 !important;
+	/* stick to the right edge */
+	transform: none !important;
+	/* remove translateX(-50%) */
 }

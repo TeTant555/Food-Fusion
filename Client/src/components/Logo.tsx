@@ -15,69 +15,69 @@ interface Logo {
   className?: string;
 }
 
-interface Logos3Props {
+interface LogoProps {
   heading?: string;
   logos?: Logo[];
   className?: string;
 }
 
-const Logos3 = ({
+const Logo= ({
   heading = "Trusted by these companies",
   logos = [
     {
       id: "logo-1",
       description: "Logo 1",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/astro-wordmark.svg",
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/company/fictional-company-logo-1.svg",
       className: "h-7 w-auto",
     },
     {
       id: "logo-2",
       description: "Logo 2",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/figma-wordmark.svg",
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/company/fictional-company-logo-2.svg",
       className: "h-7 w-auto",
     },
     {
       id: "logo-3",
       description: "Logo 3",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/nextjs-wordmark.svg",
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/company/fictional-company-logo-3.svg",
       className: "h-7 w-auto",
     },
     {
       id: "logo-4",
       description: "Logo 4",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/react-wordmark.svg",
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/company/fictional-company-logo-4.svg",
       className: "h-7 w-auto",
     },
     {
       id: "logo-5",
       description: "Logo 5",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcn-ui-wordmark.svg",
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/company/fictional-company-logo-5.svg",
       className: "h-7 w-auto",
     },
     {
       id: "logo-6",
       description: "Logo 6",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/supabase-wordmark.svg",
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/company/fictional-company-logo-6.svg",
       className: "h-7 w-auto",
     },
     {
       id: "logo-7",
       description: "Logo 7",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/tailwind-wordmark.svg",
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/company/fictional-company-logo-3.svg",
       className: "h-4 w-auto",
     },
     {
       id: "logo-8",
       description: "Logo 8",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/vercel-wordmark.svg",
+      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/company/fictional-company-logo-5.svg",
       className: "h-7 w-auto",
     },
   ],
-}: Logos3Props) => {
+}: LogoProps) => {
   return (
-    <section className="py-64">
-      <div className="container flex flex-col items-center text-center">
-        <h1 className="my-6 text-2xl font-bold text-pretty lg:text-4xl">
+    <section className="py-25 bg-ter">
+      <div className="container mx-auto flex flex-col items-center text-center">
+        <h1 className="my-6 text-2xl text-sec manrope font-bold text-pretty lg:text-4xl">
           {heading}
         </h1>
       </div>
@@ -106,12 +106,12 @@ const Logos3 = ({
               ))}
             </CarouselContent>
           </Carousel>
-          <div className="absolute inset-y-0 left-0 w-12 bg-linear-to-r from-background to-transparent"></div>
-          <div className="absolute inset-y-0 right-0 w-12 bg-linear-to-l from-background to-transparent"></div>
+          <div className="absolute inset-y-0 left-0 w-12 bg-linear-to-r from-ter to-transparent"></div>
+          <div className="absolute inset-y-0 right-0 w-12 bg-linear-to-l from-ter to-transparent"></div>
         </div>
       </div>
     </section>
   );
 };
 
-export { Logos3 };
+export { Logo };

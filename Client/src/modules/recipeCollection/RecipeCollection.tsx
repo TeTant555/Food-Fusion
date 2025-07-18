@@ -6,8 +6,10 @@ import german from "@/assets/images/german.jpg";
 import french from "@/assets/images/french.jpg";
 import japan from "@/assets/images/japan.jpg";
 import { Collection } from "@/components/Collection";
+import { Logo } from "../../components/Logo";
 
 const RecipeCollection = () => {
+
   return (
     <div>
       <div>
@@ -52,14 +54,17 @@ const RecipeCollection = () => {
               title: "Japanese Recipe",
               description:
                 "Savor a Teriyaki Vegetable Bowl — fresh veggies glazed in sweet-savory teriyaki sauce, served with steamed Japanese rice.",
-              href: "#",
+              href: "#",    
               image: japan,
             }
           ]}
         />
       </div>
       <div>
-        <Collection />
+        <Collection title="Find Your Recipe" />
+      </div>
+      <div>
+        <Logo />
       </div>
     </div>
   );

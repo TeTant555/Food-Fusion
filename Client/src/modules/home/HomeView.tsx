@@ -5,10 +5,52 @@ import cheftwo from "@/assets/images/cheftwo.jpg";
 import chefthree from "@/assets/images/chefthree.jpg";;
 import Events from "./chunks/Events";
 import { Collection } from "@/components/Collection";
+import { useState } from "react";
+import Auth from "../auth/Auth";
+
+const ANIMATION_DURATION = 350; // ms, matches modal-animate-in
 
 const HomeView = () => {
+  const [showLogin, setShowLogin] = useState(true);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleCloseLogin = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setShowLogin(false);
+      setIsClosing(false);
+    }, ANIMATION_DURATION);
+  };
+
+  const handleAuthSuccess = () => {
+    handleCloseLogin();
+    // toast is handled in Login/SignUp
+  };
+
   return (
     <div>
+      {/* Login Popup Modal */}
+      {showLogin && (
+        <div
+          className="fixed inset-0 z-40 flex items-center justify-center backdrop-blur-sm bg-black/40"
+          onClick={handleCloseLogin}
+        >
+          <div
+            className={`relative z-50 modal-animate-in${isClosing ? " animate-modal-exit" : ""}`}
+            style={isClosing ? { animation: `modal-animate-in ${ANIMATION_DURATION}ms cubic-bezier(0.4,0,0.2,1) reverse` } : {}}
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl font-bold"
+              onClick={handleCloseLogin}
+              aria-label="Close Login"
+            >
+              ×
+            </button>
+            <Auth onAuthSuccess={handleAuthSuccess} />
+          </div>
+        </div>
+      )}
       <div className="bg-pri">
         <Hero />
       </div>
@@ -57,7 +99,7 @@ const HomeView = () => {
         />
       </div>
       <div>
-       <Collection />
+       <Collection title="Featured" />
       </div>
       <div>
         <Events/>

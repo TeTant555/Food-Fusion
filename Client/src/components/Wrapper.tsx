@@ -9,6 +9,10 @@ import CommunityCookbook from '@/modules/communityCookbook/CommunityCookbook';
 import Contact from '@/modules/contactUs/Contact';
 import CulinaryResource from '@/modules/culinaryResource/CulinaryResource';
 import EducationResource from '@/modules/educationResource/EducationResource';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from '@/store';
+import Loader from './loader';
 
 const router = createBrowserRouter([
     {
@@ -65,10 +69,15 @@ const Wrapper = () => {
     const queryClient = new QueryClient();
     return (
         <>
-            <QueryClientProvider client={queryClient}>
-                <RouterProvider router={router} />
-                <Toaster />
-            </QueryClientProvider>
+            <Provider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
+                    <QueryClientProvider client={queryClient}>
+                        <Loader />
+                        <RouterProvider router={router}></RouterProvider>
+                        <Toaster />
+                    </QueryClientProvider>
+                </PersistGate>
+            </Provider>
         </>
     );
 };

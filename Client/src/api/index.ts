@@ -1,16 +1,13 @@
-import * as products from "./products";
-import * as todos from "./todos";
 import * as collections from "./collections";
+import * as auth from "./auth";
 
 class API {
-	products: typeof products;
-	todos: typeof todos;
 	collections: typeof collections;
+	auth: typeof auth;
 
 	constructor() {
-		this.products = products;
-		this.todos = todos;
 		this.collections = collections;
+		this.auth = auth;
 	}
 }
 

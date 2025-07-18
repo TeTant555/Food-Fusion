@@ -1,6 +1,6 @@
 import { Book, ChefHat, Menu, Trees} from "lucide-react";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Accordion,
@@ -25,6 +25,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from '@/store';
+import useAuth from '@/hooks/useAuth';
+import { clearUserData } from '@/store/features/authSlice';
 
 interface MenuItem {
   title: string;
@@ -52,6 +55,8 @@ interface NavbarProps {
       url: string;
     };
   };
+  onLoginClick?: () => void;
+  onSignUpClick?: () => void;
 }
 
 const Navbar = ({
@@ -98,13 +103,36 @@ const Navbar = ({
       ],
     },
   ],
-  auth = {
-    login: { title: "Login", url: "#" },
-    signup: { title: "Sign up", url: "#" },
-  },
+  onLoginClick,
+  onSignUpClick,
 }: NavbarProps) => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const user = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
+  const { userLogout } = useAuth();
+
+  const handleLogout = () => {
+    userLogout();
+    dispatch(clearUserData());
+  };
+
+  // Scroll to top when route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  const handleMobileNavClick = () => {
+    setIsOpen(false);
+  };
+
+  // Utility to hash userId for display
+  const hashUserId = (id: string) => id ? `${id.slice(0, 5)}...${id.slice(-2)}` : '';
 
   return (
     <section className="sticky top-0 z-50 py-2 sm:py-4 px-3 sm:px-6 lg:px-10 bg-pri drop-shadow-lg">
@@ -114,8 +142,8 @@ const Navbar = ({
           <div className="flex items-center gap-6 xl:gap-8">
             {/* Logo */}
             <Link to={logo.url} className="flex items-center gap-2 shrink-0">
-              <ChefHat size={35} />
-              <span className="group text-nowrap inline-flex w-max items-center justify-center rounded-md bg-pri px-3 py-2 text-base lg:text-lg font-medium transition-colors manrope text-sec">
+              <ChefHat className="text-sec" size={35} />
+              <span className="group text-nowrap inline-flex w-max items-center justify-center rounded-md bg-pri px-3 py-2 text-base lg:text-lg font-medium transition-colors inter text-sec">
                 {logo.title}
               </span>
             </Link>
@@ -131,13 +159,27 @@ const Navbar = ({
           </div>
           
           {/* Auth Buttons */}
-          <div className="flex inter font-bold items-center gap-2 shrink-0">
-            <Button asChild className="w-20 h-10 bg-ter inter hover:bg-ter/70 shadow-lg !border-0" variant="outline" size="sm">
-              <Link className="!text-sm inter text-txt" to={auth.login.url}>{auth.login.title}</Link>
-            </Button>
-            <Button asChild className="w-20 h-10 bg-sec inter hover:bg-sec/70 shadow-lg !border-0" size="sm">
-              <Link className="!text-sm !text-black inter" to={auth.signup.url}>{auth.signup.title}</Link>
-            </Button>
+          <div className="hidden xl:flex inter font-bold items-center gap-2 shrink-0">
+            {user.email ? (
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col text-txt text-sm font-semibold leading-tight text-left">
+                  <span className="inter"><span className="font-bold">Email:</span> {user.email}</span>
+                  <span className="inter"><span className="font-bold">UserId:</span> {hashUserId(user.userId)}</span>
+                </div>
+                <Button className="w-20 h-10 bg-sec text-ter inter hover:bg-sec/80 shadow-lg !border-0 ml-2" size="sm" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Button className="w-20 h-10 bg-sec inter !hover:text-ter !text-ter hover:bg-sec/80 shadow-lg !border-0" variant="outline" size="sm" onClick={onLoginClick}>
+                  Login
+                </Button>
+                <Button className="w-20 h-10 bg-sec inter !text-ter hover:bg-sec/80 shadow-lg !border-0" variant="outline" size="sm" onClick={onSignUpClick}>
+                  Sign up
+                </Button>
+              </>
+            )}
           </div>
         </nav>
 
@@ -145,16 +187,12 @@ const Navbar = ({
         <nav className="hidden lg:flex xl:hidden min-w-full justify-between items-center">
           <div className="flex items-center gap-4">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2 shrink-0">
-              <img 
-                src={logo.src} 
-                className="h-7 w-auto mix-blend-multiply" 
-                alt={logo.alt} 
-              />
-              <span className="group text-nowrap inline-flex w-max items-center justify-center rounded-md bg-pri px-2 py-1 text-base font-medium transition-colors manrope text-sec">
+            <Link to={logo.url} className="flex items-center gap-2 shrink-0">
+              <ChefHat className="text-sec" size={35} />
+              <span className="group text-nowrap inline-flex w-max items-center justify-center rounded-md bg-pri px-3 py-2 text-base lg:text-lg font-medium transition-colors inter text-sec">
                 {logo.title}
               </span>
-            </a>
+            </Link>
             
             {/* Compact Navigation */}
             <div className="flex items-center">
@@ -195,13 +233,27 @@ const Navbar = ({
           </div>
           
           {/* Auth Buttons */}
-          <div className="flex inter font-bold items-center gap-2 shrink-0">
-            <Button asChild className="w-18 h-9 bg-ter inter hover:bg-ter/70 shadow-lg !border-0" variant="outline" size="sm">
-              <Link className="!text-sm inter" to={auth.login.url}>{auth.login.title}</Link>
-            </Button>
-            <Button asChild className="w-18 h-9 bg-sec inter hover:bg-sec/70 shadow-lg !border-0" size="sm">
-              <Link className="!text-sm inter" to={auth.signup.url}>{auth.signup.title}</Link>
-            </Button>
+          <div className="hidden lg:flex xl:hidden inter font-bold items-center gap-2 shrink-0">
+            {user.email ? (
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col text-txt text-sm font-semibold leading-tight text-left">
+                  <span className="inter"><span className="font-bold">Email:</span> {user.email}</span>
+                  <span className="inter"><span className="font-bold">UserId:</span> {hashUserId(user.userId)}</span>
+                </div>
+                <Button className="w-18 h-9 bg-sec text-ter inter hover:bg-sec/80 shadow-lg !border-0 ml-2" size="sm" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Button className="w-18 h-9 bg-sec inter !text-ter !hover:text-ter hover:bg-sec/80 shadow-lg !border-0" variant="outline" size="sm" onClick={onLoginClick}>
+                  Login
+                </Button>
+                <Button className="w-18 h-9 bg-sec inter text-ter hover:bg-sec/80 shadow-lg !border-0" size="sm" onClick={onSignUpClick}>
+                  Sign up
+                </Button>
+              </>
+            )}
           </div>
         </nav>
 
@@ -209,16 +261,12 @@ const Navbar = ({
         <div className="flex lg:hidden">
           <div className="flex items-center justify-between w-full">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2 shrink-0">
-              <img 
-                src={logo.src} 
-                className="h-6 sm:h-8 w-auto mix-blend-multiply" 
-                alt={logo.alt} 
-              />
-              <span className="hidden sm:block group text-nowrap inline-flex w-max items-center justify-center rounded-md bg-pri px-2 py-1 text-sm font-medium transition-colors manrope text-sec">
+            <Link to={logo.url} className="flex items-center gap-2 shrink-0">
+              <ChefHat className="text-sec" size={35} />
+              <span className="group text-nowrap inline-flex w-max items-center justify-center rounded-md bg-pri px-3 py-2 text-base lg:text-lg font-medium transition-colors inter text-sec">
                 {logo.title}
               </span>
-            </a>
+            </Link>
             
             {/* Mobile Menu Trigger */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -230,16 +278,12 @@ const Navbar = ({
               <SheetContent className="overflow-y-auto w-full bg-pri sm:w-80">
                 <SheetHeader className="flex flex-row items-center justify-between">
                   <SheetTitle>
-                    <Link to={logo.url} className="flex items-center gap-2">
-                      <img 
-                        src={logo.src} 
-                        className="h-8 w-auto mix-blend-multiply" 
-                        alt={logo.alt} 
-                      />
-                      <span className="text-base font-medium manrope text-sec">
-                        {logo.title}
-                      </span>
-                    </Link>
+                  <Link to={logo.url} className="flex items-center gap-2 shrink-0" onClick={handleMobileNavClick}>
+                    <ChefHat className="text-sec" size={35} />
+                    <span className="group text-nowrap inline-flex w-max items-center justify-center rounded-md bg-pri px-3 py-2 text-base lg:text-lg font-medium transition-colors inter text-sec">
+                      {logo.title}
+                    </span>
+                  </Link>
                   </SheetTitle>
                 </SheetHeader>
                 
@@ -249,21 +293,31 @@ const Navbar = ({
                     collapsible
                     className="flex w-full flex-col gap-4"
                   >
-                    {menu.map((item) => renderMobileMenuItem(item, location.pathname))}
+                    {menu.map((item) => renderMobileMenuItem(item, location.pathname, handleMobileNavClick))}
                   </Accordion>
 
                   {/* Mobile Auth Buttons */}
-                  <div className="flex flex-col gap-3 pt-4 border-t">
-                    <Button asChild variant="outline" className="w-full bg-ter shadow-md !border-0 font-semibold">
-                      <Link to={auth.login.url} onClick={() => setIsOpen(false)}>
-                        {auth.login.title}
-                      </Link>
-                    </Button>
-                    <Button asChild className="w-full bg-sec hover:bg-sec/80 shadow-md !border- font-semibold">
-                      <Link to={auth.signup.url} onClick={() => setIsOpen(false)}>
-                        {auth.signup.title}
-                      </Link>
-                    </Button>
+                  <div className="flex flex-col gap-3 pt-4 border-t lg:hidden">
+                    {user.email ? (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex flex-col text-txt text-sm font-semibold leading-tight text-left">
+                          <span className="inter"><span className="font-bold">Email:</span> {user.email}</span>
+                          <span className="inter"><span className="font-bold">UserId:</span> {hashUserId(user.userId)}</span>
+                        </div>
+                        <Button className="w-full bg-sec text-ter inter hover:bg-sec/80 shadow-md !border-0 font-semibold mt-2" onClick={() => { handleLogout(); setIsOpen(false); }}>
+                          Logout
+                        </Button>
+                      </div>
+                    ) : (
+                      <>
+                        <Button className="w-full bg-sec hover:bg-sec/80 text-ter shadow-md !border-0 font-semibold" onClick={() => { if (onLoginClick) onLoginClick(); setIsOpen(false); }}>
+                          Login
+                        </Button>
+                        <Button className="w-full bg-sec text-ter hover:bg-sec/80 shadow-md !border- font-semibold" onClick={() => { if (onSignUpClick) onSignUpClick(); setIsOpen(false); }}>
+                          Sign up
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </SheetContent>
@@ -324,7 +378,7 @@ const renderCompactMenuItem = (item: MenuItem, pathname: string) => {
         >
           {item.title}
         </NavigationMenuTrigger>
-                                <NavigationMenuContent className="bg-popover text-popover-foreground absolute right-0 w-80 min-w-80">
+        <NavigationMenuContent className="bg-popover text-popover-foreground absolute right-0 w-80 min-w-80">
           {item.items.map((subItem) => (
             <NavigationMenuLink asChild key={subItem.title} className="w-full">
               <SubMenuLink item={subItem} />
@@ -349,7 +403,7 @@ const renderCompactMenuItem = (item: MenuItem, pathname: string) => {
   );
 };
 
-const renderMobileMenuItem = (item: MenuItem, pathname: string) => {
+const renderMobileMenuItem = (item: MenuItem, pathname: string, onNavigate: () => void) => {
   const isActive = item.url === pathname;
 
   if (item.items) {
@@ -364,7 +418,7 @@ const renderMobileMenuItem = (item: MenuItem, pathname: string) => {
         </AccordionTrigger>
         <AccordionContent className="mt-2 pl-4">
           {item.items.map((subItem) => (
-            <SubMenuLink key={subItem.title} item={subItem} />
+            <SubMenuLink key={subItem.title} item={subItem} onNavigate={onNavigate} />
           ))}
         </AccordionContent>
       </AccordionItem>
@@ -378,17 +432,19 @@ const renderMobileMenuItem = (item: MenuItem, pathname: string) => {
       className={`text-base py-2 font-semibold block hover:text-sec transition-colors ${
         isActive ? "text-sec" : ""
       }`}
+      onClick={onNavigate}
     >
       {item.title}
     </Link>
   );
 };
 
-const SubMenuLink = ({ item }: { item: MenuItem }) => {
+const SubMenuLink = ({ item, onNavigate }: { item: MenuItem; onNavigate?: () => void }) => {
   return (
     <Link
       className="flex flex-row gap-3 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-sec/30 hover:text-accent-foreground focus:text-sec"
       to={item.url}
+      onClick={onNavigate}
     >
       <div className="text-foreground">{item.icon}</div>
       <div className="flex-1">

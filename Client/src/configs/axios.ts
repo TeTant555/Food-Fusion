@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
-axios.defaults.baseURL = 'https://dummyjson.com/';
+axios.defaults.baseURL = 'http://localhost:8000/api/';
 
 // Add a request interceptor
 axios.interceptors.request.use(
@@ -25,7 +25,7 @@ axios.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Redirect to login page if unauthorized
-      window.location.href = '/login';
+      // window.location.href = '/login';
     }
     return Promise.reject(error);
   }

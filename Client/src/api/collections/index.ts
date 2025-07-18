@@ -18,7 +18,7 @@ export const addRecipes = {
     useMutation: (opt?: Partial<UseMutationOptions<recipesType, Error, addRecipesType>>) => {
         return useMutation<recipesType, Error, addRecipesType>({
             mutationFn: async (recipes) => {
-                const request = await axios.post(`recipes/add`, recipes);
+                const request = await axios.post(`recipes`, recipes);
                 return request.data.data;
             },
             ...opt
