@@ -5,13 +5,13 @@ import Tutorial from '@/components/Totorial'
 const EducationResource = () => {
   return (
     <div>
-      <div>
+      <div id="education-resource">
         <Resource />
       </div>
-      <div>
+      <div id="education-collection">
         <Collection />
       </div>
-      <div>
+      <div id="education-tutorial">
         <Tutorial />
       </div>
     </div>

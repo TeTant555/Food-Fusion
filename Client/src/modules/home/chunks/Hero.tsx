@@ -1,6 +1,10 @@
 import { Star } from "lucide-react";
 import React from "react";
-
+import avaone from "@/assets/images/avatorone.jpg";
+import avatwo from "@/assets/images/avatortwo.jpg";
+import avathree from "@/assets/images/avatorthree.jpg";
+import avafour from "@/assets/images/avatorfour.jpg";
+import avafive from "@/assets/images/avatorfive.jpg";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
@@ -33,23 +37,23 @@ const Hero = ({
     rating: 5.0,
     avatars: [
       {
-        src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
+        src: avaone,
         alt: "Avatar 1",
       },
       {
-        src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
+        src: avatwo,
         alt: "Avatar 2",
       },
       {
-        src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
+        src: avathree,
         alt: "Avatar 3",
       },
       {
-        src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
+        src: avafour,
         alt: "Avatar 4",
       },
       {
-        src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
+        src: avafive,
         alt: "Avatar 5",
       },
     ],

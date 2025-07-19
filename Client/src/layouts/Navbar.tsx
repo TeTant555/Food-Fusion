@@ -132,7 +132,10 @@ const Navbar = ({
   };
 
   // Utility to hash userId for display
-  const hashUserId = (id: string) => id ? `${id.slice(0, 5)}...${id.slice(-2)}` : '';
+  const hashUserId = (id: unknown) => {
+    if (typeof id !== 'string') return '';
+    return id ? `${id.slice(0, 5)}...${id.slice(-2)}` : '';
+  };
 
   return (
     <section className="sticky top-0 z-50 py-2 sm:py-4 px-3 sm:px-6 lg:px-10 bg-pri drop-shadow-lg">

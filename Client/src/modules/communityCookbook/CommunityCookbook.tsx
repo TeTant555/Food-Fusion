@@ -5,10 +5,10 @@ import Stacked from '@/modules/communityCookbook/chunks/Stacked'
 const CommunityCookbook = () => {
   return (
     <div>
-      <div>
+      <div id="blog">
         <Blog />
       </div>
-      <div>
+      <div id="community">
         <Stacked />
       </div>
     </div>

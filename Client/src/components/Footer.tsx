@@ -34,33 +34,33 @@ const Footer = ({
     {
       title: "Home",
       links: [
-        { text: "Mission", url: "#" },
-        { text: "Featured", url: "#" },
-        { text: "Services", url: "#" }
+        { text: "Mission", url: "#mission" },
+        { text: "Featured", url: "#featured" },
+        { text: "Events", url: "#events" }
       ],
     },
     {
       title: "About Us",
       links: [
-        { text: "About", url: "#" },
-        { text: "Team", url: "#" },
-        { text: "Blog", url: "#" },
-        { text: "Contact", url: "#" },
+        { text: "About", url: "#about" },
+        { text: "Team", url: "#team" },
+        { text: "Blog", url: "#blog" },
+        { text: "Contact", url: "#contact" },
       ],
     },
     {
       title: "Community Cookbook",
       links: [
-        { text: "Help", url: "#" },
-        { text: "Sales", url: "#" },
-        { text: "Advertise", url: "#" },
+        { text: "Community", url: "#community" },
+        { text: "Blog", url: "#blog" },
+        { text: "Help", url: "#help" },
       ],
     },
     {
       title: "Resources",
       links: [
-        { text: "Culinary Resource", url: "#" },
-        { text: "Education Rescource", url: "#" },
+        { text: "Culinary Resource", url: "#culinary-resource" },
+        { text: "Education Resource", url: "#education-resource" },
       ],
     },
   ],
@@ -70,6 +70,20 @@ const Footer = ({
     { text: "Privacy Policy", url: "#" },
   ],
 }: FooterProps) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
+    if (url.startsWith('#')) {
+      e.preventDefault();
+      const targetId = url.substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }
+  };
+
   return (
     <section className="py-10 bg-pri">
       <div className="container">
@@ -98,7 +112,12 @@ const Footer = ({
                       key={linkIdx}
                       className="font-medium inter hover:text-primary"
                     >
-                      <a href={link.url}>{link.text}</a>
+                      <a 
+                        href={link.url}
+                        onClick={(e) => handleLinkClick(e, link.url)}
+                      >
+                        {link.text}
+                      </a>
                     </li>
                   ))}
                 </ul>

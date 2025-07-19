@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
 export default function useAuth() {
-  const token = Cookies.get("template-app-token");
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = Cookies.get("template-app-token");
+    setIsAuthenticated(!!token);
+  }, []);
 
   const userLogin = (token: string) => {
     Cookies.set("template-app-token", token);

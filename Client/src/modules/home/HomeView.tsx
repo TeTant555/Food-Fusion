@@ -5,14 +5,29 @@ import cheftwo from "@/assets/images/cheftwo.jpg";
 import chefthree from "@/assets/images/chefthree.jpg";;
 import Events from "./chunks/Events";
 import { Collection } from "@/components/Collection";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Auth from "../auth/Auth";
+import useAuth from "@/hooks/useAuth";
 
 const ANIMATION_DURATION = 350; // ms, matches modal-animate-in
 
 const HomeView = () => {
-  const [showLogin, setShowLogin] = useState(true);
+  const { isAuthenticated } = useAuth();
+  const [showLogin, setShowLogin] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    // Only show login popup if user is not authenticated and we've checked auth status
+    if (authChecked) {
+      setShowLogin(!isAuthenticated);
+    }
+  }, [isAuthenticated, authChecked]);
+
+  useEffect(() => {
+    // Mark that we've checked authentication status
+    setAuthChecked(true);
+  }, []);
 
   const handleCloseLogin = () => {
     setIsClosing(true);
@@ -29,8 +44,8 @@ const HomeView = () => {
 
   return (
     <div>
-      {/* Login Popup Modal */}
-      {showLogin && (
+      {/* Login Popup Modal - Only show if user is not authenticated and auth has been checked */}
+      {showLogin && !isAuthenticated && authChecked && (
         <div
           className="fixed inset-0 z-40 flex items-center justify-center backdrop-blur-sm bg-black/40"
           onClick={handleCloseLogin}
@@ -51,10 +66,10 @@ const HomeView = () => {
           </div>
         </div>
       )}
-      <div className="bg-pri">
+      <div id="hero" className="bg-pri">
         <Hero />
       </div>
-      <div className="bg-ter">
+      <div id="mission" className="bg-ter">
         <Mission
           tagline="Our Mission"
           heading="A Taste of Purpose"
@@ -98,10 +113,10 @@ const HomeView = () => {
           ]}
         />
       </div>
-      <div>
+      <div id="featured">
        <Collection title="Featured" />
       </div>
-      <div>
+      <div id="events">
         <Events/>
       </div>
     </div>

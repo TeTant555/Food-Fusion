@@ -50,7 +50,7 @@ export function SignUp({ onSwitchToLogin, onAuthSuccess }: SignUpProps) {
     },
     onSuccess: (data) => {
       const payload = {
-        userId: data.id,
+        userId: String(data.id),
         email: data.email,
         role: data.role
       };

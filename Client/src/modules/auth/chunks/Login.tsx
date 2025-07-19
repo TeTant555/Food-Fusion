@@ -55,7 +55,7 @@ export function Login({
     },
     onSuccess: (data) => {
       const payload = {
-        userId: data.id,
+        userId: String(data.id),
         email: data.email,
       };
       dispatch(setUserData(payload));

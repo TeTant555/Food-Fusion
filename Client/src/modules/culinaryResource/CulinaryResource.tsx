@@ -5,13 +5,13 @@ import Tutorial from '@/components/Totorial'
 const CulinaryResource = () => {
   return (
     <div>
-      <div>
+      <div id="culinary-resource">
         <Resource />
       </div>
-      <div>
+      <div id="culinary-collection">
         <Collection />
       </div>
-      <div>
+      <div id="culinary-tutorial">
         <Tutorial />
       </div>
     </div>

@@ -3,7 +3,7 @@ import { ContactBlog } from './chunks/ContactBlog'
 
 const Contact = () => {
   return (
-    <div>
+    <div id="contact">
       <ContactBlog />
     </div>
   )

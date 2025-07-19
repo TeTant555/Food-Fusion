@@ -21,6 +21,8 @@ import api from "@/api";
 import { hideLoader, openLoader } from "@/store/features/loaderSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
+import useAuth from "@/hooks/useAuth";
+import Auth from "@/modules/auth/Auth";
 
 const items = [
   {
@@ -142,6 +144,8 @@ export default function Stacked() {
 
   // Chunk
   const dispatch = useDispatch();
+  const { isAuthenticated } = useAuth();
+  const [showLogin, setShowLogin] = useState(false);
 
   // State - You might not need these separate states if you're using React Hook Form
   const [title, setTitle] = useState("Enter your recipe title");
@@ -149,9 +153,6 @@ export default function Stacked() {
   const [alt, setAlt] = useState("Enter your image alt");
   const [url, setUrl] = useState("Enter your image URL");
   const [guide, setGuide] = useState("Write how to make your recipe");
-  const [cuisine, setCuisine] = useState("");
-  const [difficulty, setDifficulty] = useState("");
-  const [preferences, setPreferences] = useState<string[]>([]);
 
   // Initialize the form with Zod validation
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -188,9 +189,6 @@ export default function Stacked() {
       setAlt("Enter your image alt");
       setUrl("Enter your image URL");
       setGuide("Write how to make your recipe");
-      setCuisine("");
-      setDifficulty("");
-      setPreferences([]);
     },
     onError: (error) => {
       console.error(error);
@@ -203,6 +201,12 @@ export default function Stacked() {
 
   // Handle form submission
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    // Check if user is authenticated before submitting
+    if (!isAuthenticated) {
+      setShowLogin(true);
+      return;
+    }
+
     // Convert cooking_difficulty to the correct type if necessary
     const fixedData = {
       ...data,
@@ -214,10 +218,64 @@ export default function Stacked() {
     console.log("Submitted data:", fixedData);
   }
 
+  // Handle authentication success
+  const handleAuthSuccess = () => {
+    setShowLogin(false);
+    toast.success("Login successful! You can now add recipes.");
+  };
+
   // Get error message for a field
   const getErrorMessage = (fieldName: keyof z.infer<typeof FormSchema>) => {
     return form.formState.errors[fieldName]?.message;
   };
+
+  // If user is not authenticated, show login prompt
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen min-w-screen bg-ter mx-auto px-3 sm:px-4 md:px-6 lg:px-8 max-w-7xl py-4 sm:py-6 md:py-8 lg:py-10">
+        <Card className="bg-ter !border-none shadow-none">
+          <CardHeader className="px-4 sm:px-6 text-center">
+            <CardTitle className="manrope text-sec text-xl sm:text-2xl lg:text-3xl font-bold">
+              Share Your Favourite Recipes
+            </CardTitle>
+            <p className="text-muted-foreground mt-4">
+              Please log in to share your recipes with the community.
+            </p>
+          </CardHeader>
+          <CardContent className="px-4 sm:px-6 flex justify-center">
+            <Button 
+              onClick={() => setShowLogin(true)}
+              className="bg-sec hover:bg-sec/80 inter px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base"
+            >
+              Login to Continue
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Login Modal */}
+        {showLogin && (
+          <div
+            className="fixed inset-0 z-40 flex items-center justify-center backdrop-blur-sm bg-black/40"
+            onClick={() => setShowLogin(false)}
+          >
+            <div
+              className="relative z-50 modal-animate-in"
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl font-bold"
+                onClick={() => setShowLogin(false)}
+                aria-label="Close Login"
+              >
+                ×
+              </button>
+              <Auth onAuthSuccess={handleAuthSuccess} />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen min-w-screen bg-ter mx-auto px-3 sm:px-4 md:px-6 lg:px-8 max-w-7xl py-4 sm:py-6 md:py-8 lg:py-10">
@@ -343,10 +401,7 @@ export default function Stacked() {
                         <FormItem className="w-full sm:w-1/2">
                           <FormLabel className="text-sec text-sm sm:text-base">Cuisine Type</FormLabel>
                           <Select 
-                          onValueChange={(value) => {
-                            field.onChange(value);
-                            setCuisine(value);
-                          }}
+                          onValueChange={field.onChange}
                           defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger className={`w-full !bg-pri !border-0 shadow-md ${
@@ -381,10 +436,7 @@ export default function Stacked() {
                         <FormItem className="w-full sm:w-1/2">
                           <FormLabel className="text-sec text-sm sm:text-base">Cooking Difficulty</FormLabel>
                           <Select 
-                          onValueChange={(value) => {
-                            field.onChange(value);
-                            setDifficulty(value);
-                          }}
+                          onValueChange={field.onChange}
                           defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger className={`w-full !bg-pri !border-0 shadow-md ${
@@ -440,7 +492,6 @@ export default function Stacked() {
                                               ? [...field.value, item.id]
                                               : field.value.filter((value) => value !== item.id);
                                             field.onChange(newValue);
-                                            setPreferences(newValue);
                                           }}
                                         />
                                       </FormControl>

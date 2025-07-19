@@ -6,13 +6,13 @@ import { TimeLine } from "./chunks/TimeLine"
 const About = () => {
   return (
     <div>
-      <div>
+      <div id="about">
         <AboutContent />
       </div>
-      <div>
+      <div id="team">
         <Team />
       </div>
-      <div>
+      <div id="timeline">
         <TimeLine />
       </div>
     </div>
